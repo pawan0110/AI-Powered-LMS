@@ -13,6 +13,9 @@ app.use(express.json())
 app.use(cookieParser)
 
 app.use("/api/auth", authRouter)
+app.get("/", (req,res) => {
+    console.log("hello");
+})
 
 app.listen(port, () => {
     console.log(`server is listen on port ${port}`)
