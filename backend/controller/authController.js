@@ -106,3 +106,41 @@ export const verifyotp = async (req,res) => {
     return res.status(500).json({message:`verify OTP error ${error}`})
   }
 }
+
+export const resetpassword = async (req,res) => {
+  try {
+    const {email, password} = req.body
+    const user = await User.findOne({email})
+    if(!user || !user.isOtpVerified){
+      return res.status(404).json({message:"OTP verification required"})
+    }
+    const hashPassword = await bcrypt.hash(password,10)
+    user.password = hashPassword
+    user.isOtpVerified=false
+    await user.save()
+    return res.status(200).json({message:"password Reset Successfully"})
+  } catch (error) {
+    return res.status(500).json({message:`Reset password error ${error}`})
+  }
+}
+
+export const googleSignup = async (req,res) => {
+  try {
+    const {name, email, role} = req.body
+    let user = await User.findOne({email})
+    if(!user){
+      user= await User.create({name, email, role})
+    }
+    let token = await genToken(user._id)
+    res.cookie("token",token,{
+      httpOnly:true,
+      secure:false,
+      sameSite: "Strict",
+      maxAge : 7*24*60*60*1000
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({message:`googleSignup ${error}`})
+    
+  }
+}
