@@ -8,7 +8,7 @@ import getCurrentUser from "./customHooks/getCurrentUser.js";
 import { useSelector } from "react-redux";
 import Profile from "./pages/Profile.jsx";
 import ForgetPassword from "./pages/ForgetPassword.jsx";
-import { AuthRoute, PrivateRoute } from "./component/ProtectedRoutes.jsx";
+import { AuthRoute, PrivateRoute } from "./components/ProtectedRoutes.jsx";
 
 export const serverUrl = "http://localhost:8080";
 
