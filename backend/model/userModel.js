@@ -13,7 +13,10 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: function () {
+        // ✅ Require password only for local accounts
+        return this.provider === "local";
+      },
     },
     role: {
       type: String,
@@ -24,6 +27,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local", // ✅ differentiate Google users
+    },
     enrolledCourses: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,20 +39,19 @@ const userSchema = new mongoose.Schema(
       },
     ],
     resetOtp: {
-      type:String
+      type: String,
     },
-    otpExpires:{
-      type:Date
+    otpExpires: {
+      type: Date,
     },
-    isOtpVerified:{
-      type:Boolean,
-      default:false
-    }
+    isOtpVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
+const User = mongoose.model("User", userSchema);
 
-const User = mongoose.model("User", userSchema)
-
-export default(User)
+export default User;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/signup3.jpg";
+import google from "../assets/google1.png";
 import { IoIosEye } from "react-icons/io";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +10,15 @@ import { ClipLoader } from "react-spinners";
 import axios from "axios"; 
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../../utils/Firebase";
 
 function SignUp() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState(""); 
-  const [role, setRole] = useState(""); 
+  const [role, setRole] = useState("student"); 
   const [password, setPassword] = useState(""); 
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch()
@@ -39,6 +42,26 @@ function SignUp() {
       setLoading(false);
     }
   };
+
+  const googleSignup = async () => {
+    try {
+      const response = await signInWithPopup(auth,provider)
+      console.log(response);
+      let user = response.user
+      let name = user.displayName;
+      let email = user.email
+
+      const result = await axios.post(`${serverUrl}/api/auth/googlesignup`, {name, email, role}, {withCredentials:true})
+      dispatch(setUserData(result.data.user))
+      navigate("/")
+      toast.success("signUp Successfully")
+      
+    } catch (error) {
+    console.log(error);
+    toast.error(error?.response?.data?.message)
+    
+    }
+  }
 
   return (
    
@@ -122,22 +145,18 @@ function SignUp() {
               Educator
             </span>
           </div>
-          <button className="w-[80%] h-10 bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]" onClick={handleSignup} disabled={loading}>
-            {loading ? <ClipLoader size={30} color="white" /> : "Signup"}
-          </button>
-           <div className="text-[#6f6f6f]">
-            already have an account
-            <span
-              className="underline underline-offset-1 text-[black] cursor-pointer"
-              onClick={() => navigate("/login")}
-            >
-              {" "}
-              Login
-            </span>
-          </div>
+          <button className='w-[80%] h-10 bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]' disabled={loading} onClick={handleSignup}>{loading?<ClipLoader size={30} color='white' /> : "Sign Up"}</button>
+             
 
-          {/* ...rest of UI unchanged ... */}
-        </div>
+                <div className='w-[80%] flex items-center gap-2'>
+                    <div className='w-[25%] h-[0.5px] bg-[#c4c4c4]'></div>
+                    <div className='w-[50%] text-[15px] text-[#6f6f6f] flex items-center justify-center '>Or continue with</div>
+                    <div className='w-[25%] h-[0.5px] bg-[#c4c4c4]'></div>
+                </div>
+                <div className='w-[80%] h-10 border border-[black] rounded-[5px] flex items-center justify-center  ' onClick={googleSignup} ><img src={google} alt="" className='w-[25px]' /><span className='text-[18px] text-gray-500'>oogle</span> </div>
+                 <div className='text-[#6f6f6f]'>Already have an account? <span className='underline underline-offset-1 text-[black]' onClick={()=>navigate("/login")}>Login</span></div>
+
+            </div>
 
         {/* Right div */}
         <div className="md:w-1/2 w-0 h-full rounded-r-2xl bg-black md:flex flex-col items-center justify-center hidden">

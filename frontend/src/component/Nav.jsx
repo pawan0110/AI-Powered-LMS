@@ -28,6 +28,10 @@ function Nav() {
       console.log(error.response?.data?.message || error.message);
     }
   };
+  const displayLetter = userData?.name
+  ? userData.name.slice(0, 1).toUpperCase()
+  : "?";
+
 
   return (
     <div>
@@ -62,7 +66,7 @@ function Nav() {
                 />
               ) : (
                 <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] bg-black cursor-pointer">
-                  {userData?.name.slice(0, 1).toUpperCase()}
+                    {displayLetter}
                 </div>
               )}
             </div>

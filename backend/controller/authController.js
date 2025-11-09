@@ -124,23 +124,39 @@ export const resetPassword = async (req,res) => {
   }
 }
 
-export const googleSignup = async (req,res) => {
+export const googleSignup = async (req, res) => {
   try {
-    const {name, email, role} = req.body
-    let user = await User.findOne({email})
-    if(!user){
-      user= await User.create({name, email, role})
+    const { name, email, role, photoUrl } = req.body;
+    console.log("📩 Google signup body:", req.body);
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        role,
+        password: "google-auth", // dummy password (never used)
+        photoUrl,
+      });
     }
-    let token = await genToken(user._id)
-    res.cookie("token",token,{
-      httpOnly:true,
-      secure:false,
+
+    const token = await genToken(user._id);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge : 7*24*60*60*1000
-    })
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      message: "Google signup/login successful",
+      user,
+    });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({message:`googleSignup ${error}`})
-    
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: `googleSignup error: ${error.message}` });
   }
-}
+};
