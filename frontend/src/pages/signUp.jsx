@@ -31,6 +31,7 @@ function SignUp() {
         { name, password, email, role },
         { withCredentials: true }
       );
+      localStorage.setItem("token", result.data.token);
       dispatch(setUserData(result?.data))
       setLoading(false);
       navigate("/");
@@ -52,6 +53,7 @@ function SignUp() {
       let email = user.email
 
       const result = await axios.post(`${serverUrl}/api/auth/googlesignup`, {name, email, role}, {withCredentials:true})
+      localStorage.setItem("token", result.data.token);
       dispatch(setUserData(result.data.user))
       navigate("/")
       toast.success("signUp Successfully")
@@ -153,8 +155,9 @@ function SignUp() {
                     <div className='w-[50%] text-[15px] text-[#6f6f6f] flex items-center justify-center '>Or continue with</div>
                     <div className='w-[25%] h-[0.5px] bg-[#c4c4c4]'></div>
                 </div>
-                <div className='w-[80%] h-10 border border-[black] rounded-[5px] flex items-center justify-center  ' onClick={googleSignup} ><img src="google" alt="" className='w-[25px]' /><span className='text-[18px] text-gray-500'>oogle</span> </div>
-                 <div className='text-[#6f6f6f]'>Already have an account? <span className='underline underline-offset-1 text-[black]' onClick={()=>navigate("/login")}>Login</span></div>
+                <div className='w-[80%] h-10 border border-[black] rounded-[5px] flex items-center justify-center cursor-pointer ' onClick={googleSignup} ><img src={google} alt="" className='w-[25px]' /><span className='text-[18px] text-gray-500'>oogle</span> </div>
+
+                 <div className='text-[#6f6f6f]'>Already have an account? <span className='underline underline-offset-1 text-[black] cursor-pointer' onClick={()=>navigate("/login")}>Login</span></div>
 
             </div>
 

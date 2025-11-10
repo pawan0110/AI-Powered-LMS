@@ -30,6 +30,7 @@ function Login() {
         { email, password },
         { withCredentials: true } 
       );
+      localStorage.setItem("token", result.data.token);
       dispatch(setUserData(result?.data))
       setLoading(false);
       navigate("/");
@@ -58,7 +59,7 @@ function Login() {
       { name, email, role },
       { withCredentials: true }
     );
-
+    localStorage.setItem("token", result.data.token);
     dispatch(setUserData(result.data.user));
     navigate("/");
     toast.success("Login Successfully");
@@ -123,7 +124,7 @@ function Login() {
             <div className="w-[25%] h-[0.5px] bg-[#c4c4c4]"></div>
           </div>
 
-          <div className="w-[80%] h-10 border border-black rounded-[5px] flex items-center justify-center" onClick={googleLogin}>
+          <div className="w-[80%] h-10 border border-black rounded-[5px] flex items-center justify-center cursor-pointer" onClick={googleLogin}>
             <img src={google} className="w-5" alt="" />
             <span className="text-[18px] text-gray-500">oogle</span>
           </div>

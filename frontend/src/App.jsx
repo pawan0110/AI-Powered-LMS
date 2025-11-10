@@ -8,13 +8,16 @@ import getCurrentUser from "./customHooks/getCurrentUser.js";
 import { useSelector } from "react-redux";
 import Profile from "./pages/Profile.jsx";
 import ForgetPassword from "./pages/ForgetPassword.jsx";
+import EditProfile from './pages/EditProfile.jsx'
 import { AuthRoute, PrivateRoute } from "./components/ProtectedRoutes.jsx";
 
 export const serverUrl = "http://localhost:8080";
 
 function App() {
-  getCurrentUser();
-  const { userData } = useSelector((store) => store.user);
+ 
+  let { userData } = useSelector((store) => store.user);
+
+   getCurrentUser();
 
   return (
     <>
@@ -35,6 +38,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
+         <Route path='/editprofile' element={userData?<EditProfile/>:<Navigate to={"/signup"}/>}/>
       </Routes>
     </>
   );

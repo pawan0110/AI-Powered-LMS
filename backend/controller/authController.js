@@ -31,7 +31,7 @@ export const signUp = async (req, res) => {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(201).json(user);
+    return res.status(201).json(user,token);
   } catch (error) {
     return res.status(500).json({ message: `signUp error ${error}` });
   }
@@ -55,7 +55,7 @@ export const login = async (req, res) => {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(200).json(user);
+    return res.status(200).json(user,token);
   } catch (error) {
     return res.status(500).json({ message: `login error ${error}` });
   }
@@ -152,6 +152,7 @@ export const googleSignup = async (req, res) => {
     return res.status(200).json({
       message: "Google signup/login successful",
       user,
+      token
     });
   } catch (error) {
     console.error(error);
