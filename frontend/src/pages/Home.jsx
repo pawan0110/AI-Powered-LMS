@@ -4,7 +4,7 @@ import Nav from "../components/Nav";
 import { SiViaplay } from "react-icons/si";
 import Logos from '../components/Logos';
 //import Cardspage from '../components/Cardspage';
-//import ExploreCourses from '../components/ExploreCourses';
+import ExploreCourses from '../components/ExploreCourses';
 //import About from '../components/About';
 import ai from "../assets/ai.png";
 import ai1 from "../assets/SearchAi.png";
@@ -56,8 +56,9 @@ function Home() {
         </div>
       </div>
       <Logos/>
-      {/* 
+   
       <ExploreCourses/>
+          {/*
       <Cardspage/>
       <About/>
       <ReviewPage/>
