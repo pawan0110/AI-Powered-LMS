@@ -76,15 +76,34 @@ function Dashboard() {
         {/* graphs section */}
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-         <div className="bg-white rounded-lg shadow-md p-6">
-         <h2 className="text-lg font-semibold mb-4">Course progess (Lectures)</h2>
-         <ResponsiveContainer width="100%" height={300}>
-           <BarChart>
-            
-           </BarChart>
-         </ResponsiveContainer>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-lg font-semibold mb-4">
+              Course progess (Lectures)
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={courseProgressData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="lectures" fill="black" radius={[5, 5, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-         </div>
+          {/* Enrolled Students Chart */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-lg font-semibold mb-4">Student Enrollment</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={enrollData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="enrolled" fill="black" radius={[5, 5, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>
