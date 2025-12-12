@@ -131,6 +131,36 @@ function ViewCourse() {
               />
             )}
           </div>
+
+          {/*  course info */}
+          <div className="flex-1 space-y-2 mt-5">
+            <h1 className="text-2xl font-bold">{selectedCourseData?.title}</h1>
+            <p>{selectedCourseData?.subTitle}</p>
+
+            {/* Rating and price */}
+            <div className="flex items-center flex-col justify-between">
+              <div className="text-yellow-500 font-medium">
+                {/* ⭐ {avgRating}{" "} */}
+                <span className="text-gray-500">(1,200 reviews)</span>
+              </div>
+              <div>
+                <span className="text-lg font-semibold text-black">
+                  {selectedCourseData?.price}
+                </span>
+                {""}
+                <span className="line-through text-sm text-gray-400">₹599</span>
+              </div>
+            </div>
+
+            {/* Highlights */}
+            <ul className="text-sm text-gray-700 space-y-1 pt-2">
+             <li>✅ 10+ hours of video content</li>
+              <li>✅ Lifetime access to course materials</li>
+
+            </ul>
+
+            
+          </div>
         </div>
       </div>
     </div>
