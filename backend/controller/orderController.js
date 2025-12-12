@@ -1,4 +1,4 @@
-import Course from "../models/courseModel.js";
+import Course from "../model/courseModel.js";
 import razorpay from "razorpay";
 import User from "../model/userModel.js";
 import dotenv from "dotenv";
