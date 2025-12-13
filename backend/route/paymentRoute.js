@@ -1,9 +1,9 @@
 import express from "express"
-import { createOrder, varifyPayment } from "../controller/orderController.js"
+import { createOrder, verifyPayment } from "../controller/orderController.js"
 
 let paymentRouter = express.Router()
 
 paymentRouter.post("/create-order",createOrder);
-paymentRouter.post("/verify-payment", varifyPayment);
+paymentRouter.post("/verify-payment", verifyPayment);
 
 export default paymentRouter

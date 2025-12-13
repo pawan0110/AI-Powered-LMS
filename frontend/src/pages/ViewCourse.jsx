@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useFetcher, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { serverUrl } from "../App";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import img from "../assets/empty.jpg";
@@ -10,13 +10,14 @@ import { setSelectedCourseData } from "../redux/courseSlice";
 import { FaLock, FaPlayCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa6";
+// import { serverUrl } from "../App";
 
 function ViewCourse() {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { courseData } = useSelector((state) => state.course);
   const { userData } = useSelector((state) => state.user);
-  const [creatorData, setCourseData] = useState(null);
+  const [creatorData , setCreatorData] = useState(null)
   const dispatch = useDispatch();
   const [selectedLecture, setSelectedLecture] = useState(null);
   //const { lectureData } = useSelector((state) => state.lecture);
@@ -29,7 +30,7 @@ function ViewCourse() {
   // const handleReview = async () => {
   //   try {
   //     const result = await axios.post(
-  //       `{serverUrl}/api/review/givereview`,
+  //       `${serverUrl}/api/review/givereview`,
   //       { rating, comment, courseId },
   //       { withCredentials: true }
   //     );
@@ -53,38 +54,95 @@ function ViewCourse() {
   // console.log("Average Rating", avgRating);
 
   const fetchCourseData = async () => {
-    courseData.map((item) => {
-      if (item._id === courseId) {
-        dispatch(setSelectedCourseData(item));
-        console.log(selectedCourseData);
-
-        return null;
-      }
-    });
+    const course = courseData.find((item) => item._id === courseId);
+    if (course) {
+      dispatch(setSelectedCourseData(course));
+      console.log(selectedCourseData);
+    }
   };
+  useEffect(() => {
+    if (courseData?.length > 0) {
+      fetchCourseData();
+    }
+  }, [courseData, courseId]);
 
-  // const checkEnrollment = () => {
-  //   const varify = userData?.enrolledCourses?.some(c => {
-  //     const enrolledId = typeof c === 'string' ? c : c._id;
-  //     return enrolledId?.toString() === courseId?.toString();
-  //   })
-  // }
-  // console.log("Enrollment Verified:", varify);
-  // if(verify) {
-  //   setIsEnrolled(true);
-  // }
+  useEffect(() => {
+  if (creatorData?._id && courseData.length > 0) {
+    const creatorCourses = courseData.filter(
+      (course) =>
+        course.creator === creatorData._id && course._id !== courseId // Exclude current course
+    );
+    setSelectedCreatorCourse(creatorCourses);
+  
+  }
+}, [creatorData, courseData]);
 
-  // useEffect(() => {
-  //   fetchCourseData()
-  //   checkEnrollment()
-  // },[courseId,courseData,lectureData])
+
+  const handleEnroll = async (courseId, userId) => {
+    try {
+      //1. create order
+      const orderData = await axios.post(
+        `${serverUrl}/api/payment/create-order`,
+        {
+          courseId,
+          userId,
+        },
+        { withCredentials: true }
+      );
+      console.log(orderData);
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.data.amount,
+        currency: "INR",
+        name: "CODENEX",
+        description: "Course ENrollement Payment",
+        order_id: orderData.data.id,
+        handler: async function (response) {
+          console.log("Razorpay Response:", response);
+          try {
+            const verifyRes = await axios.post(
+              `${serverUrl}/api/payment/verify-payment`,
+              {
+                // ...response,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                courseId,
+                userId,
+              },
+              { withCredentials: true }
+            );
+
+            setIsEnrolled(true);
+            toast.success(verifyRes.data.message);
+          } catch (verifyError) {
+            toast.error("Payment verification failed.");
+            console.error("Verification Error:", verifyError);
+          }
+        },
+      };
+      const rzp = new window.Razorpay(options);
+
+      // OPTIONAL: Explicit payment failure handling
+      rzp.on("payment.failed", function (response) {
+        toast.error("Payment failed. Please try again.");
+        console.error("Payment Failed:", response.error);
+      });
+
+      rzp.open();
+    } catch (error) {
+      toast.error("Something went wrong while enrolling.");
+      console.error("Enroll Error:", error);
+    }
+  };
 
   useEffect(() => {
     const getCreator = async () => {
       if (selectedCourseData?.creator) {
         try {
           const result = await axios.post(
-            `{serverUrl}/api/course/getcreator`,
+            `${serverUrl}/api/course/getcreator`,
             { userId: selectedCourseData.creator },
             { withCredentials: true }
           );
@@ -154,12 +212,181 @@ function ViewCourse() {
 
             {/* Highlights */}
             <ul className="text-sm text-gray-700 space-y-1 pt-2">
-             <li>✅ 10+ hours of video content</li>
+              <li>✅ 10+ hours of video content</li>
               <li>✅ Lifetime access to course materials</li>
-
             </ul>
 
-            
+            {/* Enroll Button */}
+            {!isEnrolled ? (
+              <button
+                className="bg-black text-white px-6 py-2 rounded hover:bg-gray-700 mt-3"
+                onClick={() => handleEnroll(courseId, userData._id)}
+              >
+                Enroll now
+              </button>
+            ) : (
+              <button
+                className="bg-green-200 text-green-600 px-6 py-2 rounded hover:bg-gray-100 hover:border mt-3"
+                onClick={() => navigate(`/viewlecture/${courseId}`)}
+              >
+                Watch Now
+              </button>
+            )}
+          </div>
+        </div>
+        {/* what you'll Learn */}
+        <div>
+          <h2 className="text-xl font-semibold mb-2">What you'll Learn</h2>
+          <ul>Learn {selectedCourseData?.category} from Beginning</ul>
+        </div>
+        {/* Requirements */}
+        <div>
+          <h2 className="text-xl font-semibold mb-2">Requirements</h2>
+          <p>Basic programming knowledge is helpful but not required</p>
+        </div>
+
+        {/* who this course is for */}
+        <div>
+          <h2 className="text-xl font-semibold">Who This Course is For</h2>
+          <p className="text-gray-700">
+            Beginners, aspiring developers, and professionals looking to upgrade
+            skills
+          </p>
+        </div>
+
+        {/* course lecture */}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* left side - currriculum */}
+          <div className="bg-white w-full md:w-2/5 p-6 rounded-2xl shadow-lg border border-gray-200">
+            <h2 className="text-xl font-bold mb-1 text-gray-800">
+              Course Currriculum
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              {selectedCourseData?.lectures?.length} Lectures
+            </p>
+            <div className="flex flex-col gap-3">
+              {selectedCourseData?.lectures?.map((lecture, index) => (
+                <button
+                  key={index}
+                  disabled={!lecture.isPreviewFree}
+                  onClick={() => {
+                    if (lecture.isPreviewFree) {
+                      setSelectedLecture(lecture);
+                    }
+                  }}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 text-left ${
+                    lecture.isPreviewFree
+                      ? "hover:ng-gray-100 cursor-pointer border-gray-300"
+                      : "cursor-not-allowed opacity-60 brder-gray-200"
+                  } ${
+                    selectedLecture?.lectureTitle === lecture.lectureTitle
+                      ? "bg-gray-100 border-gray-400"
+                      : ""
+                  }`}
+                >
+                  <span className="text-lg text-gray-700">
+                    {lecture.isPreviewFree ? <FaPlayCircle /> : <FaLock />}
+                  </span>
+                  <span className="text-sm font-medium text-gray-800">
+                    {lecture.lectureTitle}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right side- video + info */}
+          <div className="bg-white w-full md:w-3/5 p-6 rounded-2xl shadow-lg border border-gray-200">
+            <div className="aspect-video w-full rounded-lg overflow-hidden mb-4 bg-black flex ietms-center justify-center">
+              {selectedLecture?.videoUrl ? (
+                <video
+                  src={selectedLecture.videoUrl}
+                  controls
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-white text-sm">
+                  Select a preview lecture to watch
+                </span>
+              )}
+            </div>
+
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              {selectedLecture?.lectureTitle || "Lecture Title"}
+            </h3>
+            <p className="text-gray-600 text-sm">{selectedCourseData?.title}</p>
+          </div>
+        </div>
+        <div className="mt-8 border-t pt-6">
+          <h2 className="text-xl font-semibold mb-2">Write a Review</h2>
+          <div className="mb-4">
+            <div className="flex gap-1 mb-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  onClick={() => setRating(star)}
+                  className={
+                    star <= rating ? "fill-yellow-500" : "fill-gray-300"
+                  }
+                />
+              ))}
+            </div>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Write your comment here..."
+              className="w-full border border-gray-300 rounded-lg p-2"
+              rows="3"
+            />
+            <button
+
+            // className="bg-black text-white mt-3 px-4 py-2 rounded hover:bg-gray-800" onClick={handleReview}
+            >
+              Submit Review
+            </button>
+          </div>
+
+          {/* Instructor Info */}
+          <div className="flex items-center gap-4 pt-4 border-t ">
+            {creatorData?.photoUrl ? (
+              <img
+                src={creatorData?.photoUrl}
+                alt="Instructor"
+                className="w-16 h-16 rounded-full object-cover"
+              />
+            ) : (
+              <img
+                src={img}
+                alt="Instructor"
+                className="w-16 h-16 rounded-full object-cover"
+              />
+            )}
+            <div>
+              <h3 className="text-lg font-semibold">{creatorData?.name}</h3>
+              <p className="md:text-sm text-gray-600 text-[10px] ">
+                {creatorData?.description}
+              </p>
+              <p className="md:text-sm text-gray-600 text-[10px] ">
+                {creatorData?.email}
+              </p>
+            </div>
+          </div>
+          <div>
+            <p className="text-xl font-semibold mb-2">
+              Other Published Courses by the Educator -
+            </p>
+            <div className="w-full transition-all duration-300 py-5   flex items-start justify-center lg:justify-start flex-wrap gap-6 lg:px-20 ">
+              {selectedCreatorCourse?.map((item, index) => (
+                <Card
+                  key={index}
+                  thumbnail={item.thumbnail}
+                  title={item.title}
+                  id={item._id}
+                  price={item.price}
+                  category={item.category}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
