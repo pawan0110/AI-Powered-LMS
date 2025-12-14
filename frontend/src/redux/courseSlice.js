@@ -5,7 +5,7 @@ const courseSlice = createSlice({
   initialState: {
     creatorCourseData: [],
     courseData: [],
-    SelectedCourseData: null,
+    selectedCourseData: null,
   },
   reducers: {
     setCreatorCourseData: (state, action) => {
@@ -15,7 +15,7 @@ const courseSlice = createSlice({
       state.courseData = action.payload;
     },
     setSelectedCourseData: (state, action) => {
-      state.SelectedCourseData = action.payload;
+      state.selectedCourseData = action.payload;
     },
   },
 });

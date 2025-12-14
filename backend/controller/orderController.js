@@ -31,60 +31,73 @@ export const createOrder = async (req, res) => {
   }
 };
 
+// export const verifyPayment = async (req, res) => {
+//   try {
+//     const {
+//       razorpay_order_id,
+//       razorpay_payment_id,
+//       razorpay_signature,
+//       courseId,
+//       userId,
+//     } = req.body;
+
+//     const generatedSignature = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_SECRET)
+//       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+//       .digest("hex");
+
+//     if (generatedSignature !== razorpay_signature) {
+//       return res.status(400).json({ message: "Invalid payment signature" });
+//     }
+
+//     // Safe to enroll now
+//     const user = await User.findById(userId);
+//     if (!user.enrolledCourses.includes(courseId)) {
+//       user.enrolledCourses.push(courseId);
+//       await user.save();
+//     }
+
+//     const course = await Course.findById(courseId);
+//     if (!course.enrolledStudents.includes(userId)) {
+//       course.enrolledStudents.push(userId);
+//       await course.save();
+//     }
+
+//     return res
+//       .status(200)
+//       .json({ message: "Payment verified and enrollment successful" });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Payment verification failed" });
+//   }
+// };
+
+
 export const verifyPayment = async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      courseId,
-      userId,
-    } = req.body;
-
     
-    // not safe.............................
+        const {razorpay_order_id , courseId , userId} = req.body
+        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+        if(orderInfo.status === 'paid') {
+      // Update user and course enrollment
+      const user = await User.findById(userId);
+      if (!user.enrolledCourses.includes(courseId)) {
+        user.enrolledCourses.push(courseId);
+        await user.save();
+      }
 
-    // const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
-    // if (orderInfo.status === "paid") {
-    //   const user = await User.findById(userId);
-    //   if (!user.enrolledCourses.includes(courseId)) {
-    //     user.enrolledCourses.push(courseId);
-    //     await user.save();
-    //   }
-    //   const course = await Course.findById(courseId).populate("lectures");
-    //   if (!course.enrolledStudents.includes(userId)) {
-    //     course.enrolledStudents.push(userId);
-    //     await course.save();
-    //   }
+      const course = await Course.findById(courseId).populate("lectures");
+      if (!course.enrolledStudents.includes(userId)) {
+        course.enrolledStudents.push(userId);
+        await course.save();
+      }
 
-    const generatedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest("hex");
-
-    if (generatedSignature !== razorpay_signature) {
-      return res.status(400).json({ message: "Invalid payment signature" });
+      return res.status(200).json({ message: "Payment verified and enrollment successful" });
+    } else {
+      return res.status(400).json({ message: "Payment verification failed (invalid signature)" });
     }
-
-    // Safe to enroll now
-    const user = await User.findById(userId);
-    if (!user.enrolledCourses.includes(courseId)) {
-      user.enrolledCourses.push(courseId);
-      await user.save();
-    }
-
-    const course = await Course.findById(courseId);
-    if (!course.enrolledStudents.includes(userId)) {
-      course.enrolledStudents.push(userId);
-      await course.save();
-    }
-
-    return res
-      .status(200)
-      .json({ message: "Payment verified and enrollment successful" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Payment verification failed" });
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error during payment verification" });
   }
 };
-

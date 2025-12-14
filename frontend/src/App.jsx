@@ -52,7 +52,7 @@ function App() {
         
          <Route path='/editprofile' element={userData?<EditProfile/>:<Navigate to={"/signup"}/>}/>
 
-         <Route path= 'viewcourse/:courseId' element={userData?<ViewCourse/>:<Navigate to={"/signup"}/>}/>
+         <Route path= '/viewcourse/:courseId' element={userData?<ViewCourse/>:<Navigate to={"/signup"}/>}/>
 
 
            <Route path='/allcourses' element={userData?<AllCourses/>:<Navigate to={"/signup"}/>}/>

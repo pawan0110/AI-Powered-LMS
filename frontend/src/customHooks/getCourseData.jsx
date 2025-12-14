@@ -12,7 +12,7 @@ const getCourseData = () => {
     const getAllPublishedCourse = async () => {
       try {
         const result = await axios.get(
-          `{serverUrl}/api/course/getpublishedcoures`,
+          `${serverUrl}/api/course/getpublishedcourses`,
           {
             withCredentials: true,
           }
