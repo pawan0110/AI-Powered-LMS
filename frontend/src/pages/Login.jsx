@@ -4,7 +4,7 @@ import google from "../assets/google1.png";
 import { IoIosEye } from "react-icons/io";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { serverUrl } from "../App";
+import { serverUrl } from "../config";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import axios from "axios"; 

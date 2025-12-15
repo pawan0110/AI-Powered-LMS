@@ -3,7 +3,7 @@ import logo from "../assets/signup3.jpg";
 import { IoMdPerson } from "react-icons/io";
 import { GiHamburgerMenu, GiSplitCross } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
-import { serverUrl } from "../App";
+import { serverUrl } from "../config";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";

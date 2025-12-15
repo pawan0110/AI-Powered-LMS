@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import img1 from "../../assets/empty.jpg";
 import { FaEdit } from "react-icons/fa";
-import { serverUrl } from "../../App";
+import { serverUrl } from "../../config";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

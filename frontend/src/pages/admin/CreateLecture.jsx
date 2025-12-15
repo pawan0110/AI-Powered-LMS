@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { serverUrl } from "../../App";
+import { serverUrl } from "../../config";
 import { ClipLoader } from "react-spinners";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

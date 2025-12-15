@@ -13,7 +13,7 @@ import ai1 from "../assets/SearchAi.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { serverUrl } from "../App.jsx";
+import { serverUrl } from "../config";
 import { setCourseData } from "../redux/courseSlice.js";
 function Home() {
   const navigate = useNavigate();

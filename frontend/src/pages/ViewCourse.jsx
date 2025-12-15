@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { serverUrl } from '../App';
+import { serverUrl } from '../config';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import img from "../assets/empty.jpg"
 import Card from "../components/Card.jsx"
@@ -171,7 +171,7 @@ const handleEnroll = async (courseId, userId) => {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: orderData.data.amount,
       currency: "INR",
-      name: "Virtual Courses",
+      name: "CODENEX",
       description: "Course Enrollment Payment",
       order_id: orderData.data.id,
       handler: async function (response) {

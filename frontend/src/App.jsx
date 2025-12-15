@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect}from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import SignUp from "./pages/signUp.jsx";
 import Home from "./pages/Home.jsx";
@@ -19,15 +19,18 @@ import EditProfile from './pages/EditProfile.jsx'
 // import getCouseData from './customHooks/getCouseData'
 import ViewCourse from './pages/ViewCourse'
 import { AuthRoute, PrivateRoute } from "./components/ProtectedRoutes.jsx";
-
-export const serverUrl = "http://localhost:8080";
+import ViewLecture from "./pages/viewLecture.jsx";
+import EnrolledCourse from "./pages/admin/EnrolledCourse.jsx";
+ 
 
 function App() {
  
   let { userData } = useSelector((store) => store.user);
 
   
-    getCurrentUser();
+  getCurrentUser();
+
+
  
 
   return (
@@ -51,8 +54,10 @@ function App() {
         </Route>
         
          <Route path='/editprofile' element={userData?<EditProfile/>:<Navigate to={"/signup"}/>}/>
+         <Route path='/enrolledcourses' element={userData?<EnrolledCourse/>:<Navigate to={"/signup"}/>}/>
 
          <Route path= '/viewcourse/:courseId' element={userData?<ViewCourse/>:<Navigate to={"/signup"}/>}/>
+         <Route path= '/viewlecture/:courseId' element={userData?<ViewLecture/>:<Navigate to={"/signup"}/>}/>
 
 
            <Route path='/allcourses' element={userData?<AllCourses/>:<Navigate to={"/signup"}/>}/>
