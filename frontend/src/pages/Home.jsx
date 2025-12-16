@@ -5,11 +5,11 @@ import { SiViaplay } from "react-icons/si";
 import Logos from "../components/Logos";
 import Cardspage from "../components/Cardspage.jsx";
 import ExploreCourses from "../components/ExploreCourses";
-//import About from '../components/About';
+import About from '../components/About';
 import ai from "../assets/ai.png";
 import ai1 from "../assets/SearchAi.png";
 //import ReviewPage from '../components/ReviewPage';
-//import Footer from '../components/Footer';
+import Footer from '../components/Footer';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -31,8 +31,8 @@ function Home() {
         console.log("Failed to fetch courses", error);
       }
     };
-    fetchCourses()
-  },[dispatch]);
+    fetchCourses();
+  }, [dispatch]);
 
   return (
     <div className="w-full overflow-hidden">
@@ -80,10 +80,8 @@ function Home() {
       <ExploreCourses />
 
       <Cardspage />
-      {/*
-      <About/>
-      <ReviewPage/>
-      <Footer/> */}
+      <About />
+      <Footer />
     </div>
   );
 }
