@@ -149,7 +149,9 @@ export const editLecture = async (req, res) => {
 
     if (req.file) {
       const uploaded = await uploadOnCloudinary(req.file.path);
-      lecture.videoUrl = uploaded;
+      // uploadOnCloudinary returns an object { url, public_id }
+      // `videoUrl` field on Lecture schema expects a string, so store the URL
+      lecture.videoUrl = uploaded?.url || uploaded?.secure_url || uploaded || "";
     }
 
     if (lectureTitle) lecture.lectureTitle = lectureTitle;

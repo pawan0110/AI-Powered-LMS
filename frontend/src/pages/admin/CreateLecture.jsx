@@ -11,10 +11,10 @@ import { setLectureData } from "../../redux/lectureSlice";
 function CreateLecture() {
   const navigate = useNavigate();
   const { courseId } = useParams();
-  const [lectureTitle, setLectureTitle] = useState();
+  const [lectureTitle, setLectureTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const { lectureData } = useSelector((state) => state.lecture);
+  const { lectureData = [] } = useSelector((state) => state.lecture || {});
 
   const createLectureHandler = async () => {
     setLoading(true);
@@ -29,6 +29,8 @@ function CreateLecture() {
       toast.success("Lecture Created");
       setLoading(false);
       setLectureTitle("");
+      // navigate to edit page so the educator can upload video for the newly created lecture
+      navigate(`/editlecture/${courseId}/${result.data.lecture._id}`);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -51,7 +53,7 @@ function CreateLecture() {
       }
     };
     getLecture();
-  }, []);
+  }, [courseId, dispatch]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

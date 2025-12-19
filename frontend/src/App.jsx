@@ -14,7 +14,6 @@ import CreateLecture from "./pages/admin/CreateLecture.jsx";
 import EditLecture from "./pages/admin/EditLecture.jsx";
 import AllCourses from "./pages/AllCourses.jsx";
 import CreateCourse from './pages/admin/CreateCourse'
-//import CreateLecture from './pages/admin/CreateLecture'
 import ForgetPassword from "./pages/ForgetPassword.jsx";
 import EditProfile from './pages/EditProfile.jsx'
 import getCourseData from "./customHooks/getCourseData.jsx";
@@ -22,11 +21,12 @@ import ViewCourse from './pages/ViewCourse'
 import { AuthRoute, PrivateRoute } from "./components/ProtectedRoutes.jsx";
 import ViewLecture from "./pages/viewLecture.jsx";
 import EnrolledCourse from "./pages/admin/EnrolledCourse.jsx";
-//import EnrolledCourse from './pages/EnrolledCourse'
+
 import  getCreatorCourseData from "./customHooks/getCreatorCourseData.jsx"
 
 import useGetAllReviews from './customHooks/getAllReviews'
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import SearchWithAi from "./pages/SearchWithAi.jsx";
  
 
 function App() {
@@ -75,9 +75,10 @@ function App() {
          <Route path='/courses' element={userData?.role==="educator"?<Courses/>:<Navigate to={"/signup"}/>}/>
           <Route path='/addcourses/:courseId' element={userData?.role === "educator"?<AddCourses/>:<Navigate to={"/signup"}/>}/>
         <Route path='/createcourses' element={userData?.role === "educator"?<CreateCourse/>:<Navigate to={"/signup"}/>}/>
-        {/* <Route path='/createlecture/:courseId' element={userData?.role === "educator"?<CreateLecture/>:<Navigate to={"/signup"}/>}/>
+        <Route path='/createlecture/:courseId' element={userData?.role === "educator"?<CreateLecture/>:<Navigate to={"/signup"}/>}/>
          <Route path='/editlecture/:courseId/:lectureId' element={userData?.role === "educator"?<EditLecture/>:<Navigate to={"/signup"}/>}/>
-        <Route path='/forgotpassword' element={ForgetPassword}/> */}
+        <Route path='/forgotpassword' element={ForgetPassword}/>
+        <Route path='/searchwithai' element={userData ? <SearchWithAi/> : <Navigate to={"/signup"}/>} />
       </Routes>
     </>
   );

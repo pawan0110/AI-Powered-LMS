@@ -8,7 +8,7 @@ import ExploreCourses from "../components/ExploreCourses";
 import About from '../components/About';
 import ai from "../assets/ai.png";
 import ai1 from "../assets/SearchAi.png";
-
+import ReviewPage from "../components/ReviewPage.jsx";
 import Footer from '../components/Footer';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -46,7 +46,7 @@ function Home() {
         <span className="lg:text-[70px] absolute  md:text-[40px]  lg:top-[10%] top-[15%] w-full flex items-center justify-center text-white font-bold text-[20px] ">
           “Learn. Build. Evolve.”
         </span>
-        <span className="lg:text-[70px] text-[20px] md:text-[40px] absolute lg:top-[18%] top-[20%] w-full flex items-center justify-center text-white font-bold">
+        <span className="lg:text-[70px] text-[20px] md:text-[40px] absolute lg:top-[18%] top-[20%] w-full flex items-center justify-center text-white text-whitefont-bold">
           Turn Your Code into a Career with CodeNex
         </span>
         <div className="absolute lg:top-[30%] top-[75%]  md:top-[80%] w-full flex items-center justify-center gap-3 flex-wrap">
@@ -81,7 +81,7 @@ function Home() {
 
       <Cardspage />
       <About />
-      
+      <ReviewPage/>
       <Footer />
     </div>
   );
