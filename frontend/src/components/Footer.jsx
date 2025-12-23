@@ -7,15 +7,15 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-black text-gray-300 py-10 px-6">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-36 items-start justify-center">
+    <footer className="bg-black text-gray-300 py-12 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-28 items-start">
 
         {/* Brand Info */}
-        <div className="lg:w-[40%] md:w-[50%] w-full">
+        <div className="lg:w-[35%] md:w-[50%] w-full">
           <img
             src={logo}
             alt="CodeNex logo"
-            className="h-10 mb-4 rounded-md"
+            className="h-10 mb-6 rounded-md -mt-4"
           />
           <h2 className="text-xl font-semibold text-white mb-3">
             CodeNex
@@ -28,29 +28,41 @@ const Footer = () => {
         </div>
 
         {/* Navigation */}
-        <div className="lg:w-[30%] w-full">
-          <h3 className="text-white font-semibold mb-3">
+        <div className="lg:w-[20%] w-full mt-2">
+          <h3 className="text-white font-semibold mb-4">
             Platform
           </h3>
           <ul className="space-y-2 text-sm">
-            <li className="hover:text-white cursor-pointer" onClick={() => navigate("/")}>
+            <li
+              className="hover:text-white cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               Home
             </li>
-            <li className="hover:text-white cursor-pointer" onClick={() => navigate("/allcourses")}>
+            <li
+              className="hover:text-white cursor-pointer"
+              onClick={() => navigate("/allcourses")}
+            >
               Browse Courses
             </li>
-            <li className="hover:text-white cursor-pointer" onClick={() => navigate("/profile")}>
+            <li
+              className="hover:text-white cursor-pointer"
+              onClick={() => navigate("/profile")}
+            >
               Student Dashboard
             </li>
-            <li className="hover:text-white cursor-pointer" onClick={() => navigate("/login")}>
+            <li
+              className="hover:text-white cursor-pointer"
+              onClick={() => navigate("/login")}
+            >
               Sign In
             </li>
           </ul>
         </div>
 
         {/* Categories */}
-        <div className="lg:w-[30%] w-full">
-          <h3 className="text-white font-semibold mb-3">
+        <div className="lg:w-[20%] w-full mt-2">
+          <h3 className="text-white font-semibold mb-4">
             Popular Tracks
           </h3>
           <ul className="space-y-2 text-sm">
@@ -69,12 +81,12 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Personal Links */}
-        <div className="lg:w-[30%] w-full">
-          <h3 className="text-white font-semibold mb-3">
+        {/* Social */}
+        <div className="lg:w-[20%] w-full mt-2">
+          <h3 className="text-white font-semibold mb-4">
             Connect With Me
           </h3>
-          <div className="flex items-center gap-4 mt-2">
+          <div className="flex flex-col gap-3 text-sm">
             <a
               href="https://github.com/pawan0110"
               target="_blank"
@@ -96,11 +108,10 @@ const Footer = () => {
             </a>
           </div>
         </div>
-
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-700 mt-10 pt-5 text-sm text-center text-gray-500">
+      <div className="border-t border-gray-800 mt-12 pt-6 text-sm text-center text-gray-500">
         © {new Date().getFullYear()} CodeNex. Built for learning and growth.
       </div>
     </footer>

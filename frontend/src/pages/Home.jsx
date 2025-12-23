@@ -87,4 +87,97 @@ function Home() {
   );
 }
 
-export default Home;
+// export default Home;
+// import React, { useEffect } from "react";
+// import Nav from "../components/Nav";
+// import { SiViaplay } from "react-icons/si";
+// import Logos from "../components/Logos";
+// import Cardspage from "../components/Cardspage.jsx";
+// import ExploreCourses from "../components/ExploreCourses";
+// import About from "../components/About";
+// import ReviewPage from "../components/ReviewPage.jsx";
+// import Footer from "../components/Footer";
+// import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+// import axios from "axios";
+// import { serverUrl } from "../config";
+// import { setCourseData } from "../redux/courseSlice.js";
+
+// function Home() {
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+
+//   useEffect(() => {
+//     const fetchCourses = async () => {
+//       try {
+//         const res = await axios.get(
+//           `${serverUrl}/api/course/getpublishedcourses`,
+//           { withCredentials: true }
+//         );
+//         dispatch(setCourseData(res.data));
+//       } catch (error) {
+//         console.log("Failed to fetch courses", error);
+//       }
+//     };
+//     fetchCourses();
+//   }, [dispatch]);
+
+//   return (
+//     <div className="w-full bg-white text-black overflow-hidden">
+
+//       {/* HERO */}
+//       <section className="min-h-[80vh]">
+//         <Nav />
+
+//         <div className="max-w-6xl mx-auto px-6 pt-32 text-center">
+
+//           <p className="text-xs tracking-widest uppercase text-gray-600 mb-4">
+//             Learn • Build • Evolve
+//           </p>
+
+//           <h1 className="text-[32px] md:text-[48px] lg:text-[60px] font-bold leading-tight mb-6">
+//             Turn Your Code into a Career <br />
+//             with <span className="text-black">CodeNex</span>
+//           </h1>
+
+//           <p className="max-w-2xl mx-auto text-gray-700 text-sm md:text-base mb-8">
+//             CodeNex is a modern learning platform designed to help you build
+//             real-world skills through structured courses, guided learning,
+//             and hands-on projects.
+//           </p>
+
+//           <div className="flex items-center justify-center gap-4 flex-wrap">
+
+//             <button
+//               onClick={() => navigate("/allcourses")}
+//               className="border border-black px-6 py-3 rounded-lg text-sm font-medium"
+//             >
+//               View All Courses
+//               <SiViaplay className="inline ml-2 w-4 h-4" />
+//             </button>
+
+//             <button
+//               onClick={() => navigate("/searchwithai")}
+//               className="bg-black text-white px-6 py-3 rounded-lg text-sm font-medium"
+//             >
+//               Search with AI
+//             </button>
+
+//           </div>
+
+//         </div>
+//       </section>
+
+//       {/* CONTENT */}
+//       <Logos />
+//       <ExploreCourses />
+//       <Cardspage />
+//       <About />
+//       <ReviewPage />
+//       <Footer />
+//     </div>
+//   );
+// }
+
+ export default Home;
+// // 
